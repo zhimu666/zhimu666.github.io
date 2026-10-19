@@ -7,8 +7,8 @@
 <title>AI 行业日报 · SIGNAL</title>
 <meta name="description" content="SIGNAL：零依赖的 AI 行业日报看板。九条示例新闻、分级筛选、搜索、阅读进度、七日走势与排行，纯 HTML/CSS/JS 单文件。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%235B5BF0'/%3E%3Ctext%20x='16'%20y='24'%20font-family='sans-serif'%20font-size='20'%20font-weight='700'%20text-anchor='middle'%20fill='%23FFFFFF'%3E%E2%88%BF%3C/text%3E%3C/svg%3E">
-<meta name="theme-color" content="#F3F5FF" media="(prefers-color-scheme:light)">
-<meta name="theme-color" content="#0E1020" media="(prefers-color-scheme:dark)">
+<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#14120F" media="(prefers-color-scheme:dark)">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="SIGNAL · AI 行业日报">
 <meta property="og:title" content="SIGNAL · AI 行业日报">
@@ -20,22 +20,22 @@
    默认浅色，深色由使用者主动切换并记住。所有字体用系统字体，图形用 CSS 与内联 SVG，不依赖任何外部资源。
    图表颜色取自已校验的分类色（蓝、橙、青），深浅两套分别校验过。 */
 :root{
-  --bg:#F3F5FF; --surface:#FFFFFF; --ink:#161B33; --muted:#5A6285; --line:#E1E5F2; --soft:#ECEFFC;
-  --accent:#5B5BF0; --accent-ink:#FFFFFF; --accent-soft:#E7E8FE;
-  --hi:#C2352F; --hi-bg:#FDEBEA; --mid:#8A5A00; --mid-bg:#FFF1D6; --ok:#0E7A4B; --ok-bg:#DDF3E8;
+  --bg:#F7F5F0; --surface:#FFFFFF; --ink:#15130F; --muted:#6B665C; --line:#E4DFD3; --soft:#EFEBE1;
+  --accent:#C93A18; --accent-ink:#FFFFFF; --accent-soft:#FBE6DF;
+  --hi:#A8281F; --hi-bg:#FBE4E1; --mid:#8A5A00; --mid-bg:#FFF1D6; --ok:#0E7A4B; --ok-bg:#DDF3E8;
   --s1:#2A78D6; --s2:#EB6834; --s3:#1BAF7A;
-  --lead-a:#4F6BFF; --lead-b:#7A5CF0;
-  --scrim:rgba(22,27,51,.45); --shadow:0 1px 2px rgba(22,27,51,.05),0 8px 24px rgba(22,27,51,.06);
+  --lead-a:#15130F; --lead-b:#15130F;
+  --scrim:rgba(21,19,15,.45); --shadow:0 1px 2px rgba(21,19,15,.05),0 8px 24px rgba(21,19,15,.05);
   --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei UI","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
   --gutter:clamp(16px,4vw,40px); --head-h:60px;
   padding-block:env(safe-area-inset-top,0px) env(safe-area-inset-bottom,0px);
 }
 :root[data-theme="dark"]{
-  --bg:#0E1020; --surface:#171A2E; --ink:#E8EBFA; --muted:#9AA2C8; --line:#2A3050; --soft:#1F2340;
-  --accent:#8F8FFF; --accent-ink:#0E1020; --accent-soft:#25285A;
+  --bg:#14120F; --surface:#1D1A16; --ink:#F3EFE6; --muted:#A39D90; --line:#2F2A23; --soft:#26221C;
+  --accent:#FF6A45; --accent-ink:#14120F; --accent-soft:#3A1D14;
   --hi:#FF8F88; --hi-bg:#3A1C22; --mid:#F0C25A; --mid-bg:#3A2E12; --ok:#6FD3A1; --ok-bg:#12301F;
   --s1:#3987E5; --s2:#D95926; --s3:#199E70;
-  --lead-a:#3A4FD0; --lead-b:#5B3FC4;
+  --lead-a:#2B251D; --lead-b:#2B251D;
   --scrim:rgba(0,0,0,.6); --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
   color-scheme:dark;
 }
@@ -50,7 +50,7 @@ kbd{font:inherit;font-size:.75rem;padding:1px 7px;border:1px solid var(--line);b
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* 顶栏 */
-.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;height:var(--head-h);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;height:var(--head-h);background:var(--bg);border-bottom:1px solid var(--line)}
 .head .wrap{height:100%;display:flex;align-items:center;gap:14px}
 .logo{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.08em;text-decoration:none;white-space:nowrap}
 .logo i{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--lead-a),var(--lead-b));color:#FFFFFF;font-style:normal;font-size:15px;line-height:1}

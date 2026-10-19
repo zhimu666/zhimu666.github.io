@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>绩点计算器 · 加权 GPA 与目标反推</title>
+<meta name="description" content="为中国大学生设计的绩点计算器：百分制与五级制成绩、两种常见换算规则、目标绩点反推。数据只保存在本机。">
+<style>
+:root{--bg:#f7f5f0;--surface:#ffffff;--ink:#15130f;--muted:#6b665c;--line:#e4dfd3;--accent:#d9421f;--accent-ink:#ffffff}
+:root[data-theme="dark"]{--bg:#14120f;--surface:#1d1a16;--ink:#f3efe6;--muted:#a39d90;--line:#2f2a23;--accent:#ff6a45;--accent-ink:#14120f}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14120f;--surface:#1d1a16;--ink:#f3efe6;--muted:#a39d90;--line:#2f2a23;--accent:#ff6a45;--accent-ink:#14120f}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6;font-size:16px}
+.num,output,td.n,th.n{font-variant-numeric:tabular-nums}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;min-height:56px;gap:12px}
+.top a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--muted);font-size:15px}
+.top a:hover{color:var(--accent)}
+button,.btn{font:inherit;min-height:44px;padding:0 18px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+button:hover{border-color:var(--ink)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+button.primary:hover{filter:brightness(.94)}
+button.link{border:0;background:none;min-height:44px;padding:0 10px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+button.link:hover{color:var(--accent)}
+button.link.danger:hover{color:var(--accent)}
+header.hero{padding:56px 0 32px}
+.kicker{color:var(--accent);font-weight:600;letter-spacing:.08em;font-size:14px;margin:0 0 12px}
+h1{font-size:clamp(34px,6vw,60px);line-height:1.1;margin:0 0 16px;letter-spacing:-.02em}
+.lede{max-width:46em;color:var(--muted);font-size:18px;margin:0}
+.notice{margin:24px 0 0;padding:14px 16px;border-left:4px solid var(--accent);background:var(--surface);font-size:15px;max-width:46em}
+h2{font-size:22px;margin:0 0 20px;letter-spacing:-.01em}
+section{padding:36px 0;border-top:1px solid var(--line)}
+.result{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px;align-items:end}
+.big{font-size:clamp(64px,13vw,128px);line-height:.95;font-weight:700;letter-spacing:-.04em;color:var(--accent);margin:0}
+.label{color:var(--muted);font-size:14px;margin:0 0 8px;display:block}
+.mid{font-size:clamp(32px,5vw,48px);font-weight:600;line-height:1.1;margin:0}
+.rule{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:32px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:14px;color:var(--muted)}
+input,select{font:inherit;min-height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:100%;min-width:0}
+input:hover,select:hover{border-color:var(--muted)}
+.form{display:grid;grid-template-columns:2fr 1fr 1.2fr 1fr auto;gap:12px;align-items:end}
+.err{color:var(--accent);font-size:14px;min-height:22px;margin:8px 0 0}
+.tablewrap{position:relative;overflow-x:auto;margin-top:16px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:16px}
+caption{text-align:left;padding:12px 16px;color:var(--muted);font-size:14px}
+th,td{padding:6px 16px;text-align:left;border-top:1px solid var(--line);white-space:nowrap}
+th{font-weight:500;color:var(--muted);font-size:14px}
+td.n,th.n{text-align:right}
+td.act{text-align:right}
+.empty{padding:40px 24px;text-align:center;border:1px dashed var(--line);border-radius:10px;margin-top:16px}
+.empty p{margin:0 0 16px;color:var(--muted)}
+.empty small{display:block;margin-top:12px;color:var(--muted)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;align-items:center}
+.target{display:grid;grid-template-columns:1fr 1fr 2fr;gap:24px;align-items:end}
+.need{font-size:15px;margin:0}
+.need strong{display:block;font-size:clamp(36px,6vw,56px);line-height:1.1;letter-spacing:-.02em;color:var(--accent)}
+.chart{margin-top:8px}
+.chart svg{width:100%;height:auto;display:block}
+.chart text{fill:var(--muted);font-size:12px;font-family:inherit}
+.chart .val{fill:var(--ink);font-weight:600}
+.chart .bar{fill:var(--accent)}
+.chart .grid{stroke:var(--line)}
+details{margin-top:20px}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--muted)}
+textarea{width:100%;min-height:150px;font:inherit;font-size:14px;padding:12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);resize:vertical}
+.toast{color:var(--muted);font-size:14px;min-height:22px}
+footer{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--muted);font-size:14px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:760px){
+ .result,.target{grid-template-columns:1fr;gap:20px}
+ .form{grid-template-columns:1fr 1fr}
+ .form .f-name{grid-column:1/-1}
+ .form button{grid-column:1/-1}
+ header.hero{padding-top:36px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <a href="https://zhimu666.github.io/">← 作品集</a>
+  <button type="button" id="theme" aria-label="切换深色或浅色主题">主题：跟随系统</button>
+</div></div>
+
+<main class="wrap">
+<header class="hero">
+  <p class="kicker">绩点计算器</p>
+  <h1>把每门课的分数，<br>算成一个数。</h1>
+  <p class="lede">录入课程、学分与成绩，实时得到加权平均绩点；再告诉它目标，反推剩余课程需要考到多少。</p>
+  <p class="notice" role="note"><strong>请先确认学校规则。</strong>各校绩点换算方法并不统一，本工具提供的两种规则仅为常见做法，结果仅供参考，请以本校教务处公布的规则为准。</p>
+</header>
+
+<section aria-labelledby="h-res">
+  <h2 id="h-res">当前绩点</h2>
+  <div class="result" aria-live="polite" aria-atomic="true">
+    <div><span class="label">加权平均绩点</span><p class="big num" id="gpa">—</p></div>
+    <div><span class="label">总学分</span><p class="mid num" id="credits">0</p></div>
+    <div><span class="label">平均成绩（百分制折算）</span><p class="mid num" id="avg">—</p></div>
+  </div>
+  <div class="rule">
+    <div class="field" style="min-width:min(100%,320px)">
+      <label for="rule">换算规则</label>
+      <select id="rule">
+        <option value="seg">常见 4.0 分段法（90–100 为 4.0）</option>
+        <option value="lin">百分制 10-5 法：(分数−50)÷10</option>
+      </select>
+    </div>
+  </div>
+  <p class="label" id="ruleNote" style="margin-top:12px"></p>
+</section>
+
+<section aria-labelledby="h-add">
+  <h2 id="h-add">课程</h2>
+  <form class="form" id="form" novalidate>
+    <div class="field f-name"><label for="name">课程名称</label><input id="name" autocomplete="off" placeholder="如：高等数学"></div>
+    <div class="field"><label for="cr">学分</label><input id="cr" inputmode="decimal" placeholder="如 4"></div>
+    <div class="field"><label for="type">成绩类型</label>
+      <select id="type"><option value="score">百分制</option><option value="grade">五级制</option></select></div>
+    <div class="field"><label for="val" id="valLabel">分数（0–100）</label>
+      <input id="val" inputmode="decimal" placeholder="如 92"><select id="gsel" hidden>
+        <option>优秀</option><option>良好</option><option>中等</option><option>及格</option><option>不及格</option></select></div>
+    <button class="primary" type="submit" id="submit">添加课程</button>
+  </form>
+  <p class="err" id="err" role="alert"></p>
+
+  <div id="listArea"></div>
+</section>
+
+<section aria-labelledby="h-t">
+  <h2 id="h-t">目标绩点反推</h2>
+  <div class="target">
+    <div class="field"><label for="tg">目标总绩点</label><input id="tg" inputmode="decimal" placeholder="如 3.5"></div>
+    <div class="field"><label for="rc">剩余课程总学分</label><input id="rc" inputmode="decimal" placeholder="如 60"></div>
+    <p class="need" id="need" aria-live="polite">填写目标与剩余学分，这里会显示剩余课程需要达到的平均绩点。</p>
+  </div>
+</section>
+
+<section aria-labelledby="h-c">
+  <h2 id="h-c">各科绩点</h2>
+  <div class="chart" id="chart"></div>
+</section>
+
+<section aria-labelledby="h-x">
+  <h2 id="h-x">导出</h2>
+  <div class="tools">
+    <button type="button" id="copy">复制为文本</button>
+    <button type="button" id="dl">下载 .txt</button>
+    <span class="toast" id="toast" role="status"></span>
+  </div>
+  <details><summary>预览文本</summary><label class="sr" for="out">导出文本</label><textarea id="out" readonly></textarea></details>
+</section>
+</main>
+
+<footer><div class="wrap">人机交互课程 · 个人作品 · AI 辅助开发</div></footer>
+
+<script>
+(function(){
+"use strict";
+var mem={}, store={
+  get:function(k){try{var v=localStorage.getItem(k);return v===null?(k in mem?mem[k]:null):v}catch(e){return k in mem?mem[k]:null}},
+  set:function(k,v){mem[k]=v;try{localStorage.setItem(k,v)}catch(e){}}
+};
+var $=function(id){return document.getElementById(id)};
+var GRADE={"优秀":95,"良好":85,"中等":75,"及格":65,"不及格":0};
+var rows=[],rule="seg",editId=null,uid=1;
+
+function pointSeg(s){
+  if(s>=90)return 4;if(s>=85)return 3.7;if(s>=82)return 3.3;if(s>=78)return 3;if(s>=75)return 2.7;
+  if(s>=72)return 2.3;if(s>=68)return 2;if(s>=64)return 1.5;if(s>=60)return 1;return 0}
+function pointLin(s){return s>=60?(s-50)/10:0}
+function pct(r){return r.type==="grade"?GRADE[r.value]:Number(r.value)}
+function pt(r){var s=pct(r);return rule==="seg"?pointSeg(s):pointLin(s)}
+function f2(x){return (Math.round(x*100)/100).toFixed(2)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+
+function totals(){
+  var c=0,w=0,sc=0;
+  rows.forEach(function(r){c+=r.credits;w+=r.credits*pt(r);sc+=r.credits*pct(r)});
+  return {c:c,w:w,gpa:c?w/c:null,avg:c?sc/c:null}}
+
+function save(){store.set("gpa.v1",JSON.stringify({rows:rows,rule:rule,uid:uid}))}
+function load(){
+  try{var d=JSON.parse(store.get("gpa.v1")||"null");if(d&&Array.isArray(d.rows)){rows=d.rows;rule=d.rule==="lin"?"lin":"seg";uid=d.uid||rows.length+1}}catch(e){}}
+
+function render(){
+  var t=totals();
+  $("gpa").textContent=t.gpa===null?"—":f2(t.gpa);
+  $("credits").textContent=t.c?String(Math.round(t.c*100)/100):"0";
+  $("avg").textContent=t.avg===null?"—":f2(t.avg);
+  $("rule").value=rule;
+  $("ruleNote").textContent=rule==="seg"
+    ?"分段：90+=4.0，85–89=3.7，82–84=3.3，78–81=3.0，75–77=2.7，72–74=2.3，68–71=2.0，64–67=1.5，60–63=1.0，不足 60=0。五级制按 优秀95/良好85/中等75/及格65/不及格0 折算。"
+    :"60 分及以上：(分数−50)÷10，不足 60 记 0，满分 100 对应 5.0。五级制按 优秀95/良好85/中等75/及格65/不及格0 折算。";
+  renderList();renderChart();renderTarget();
+  var txt=exportText();$("out").value=txt;
+}
+
+function renderList(){
+  var a=$("listArea");
+  if(!rows.length){
+    a.innerHTML='<div class="empty"><p>还没有课程。添加第一门课，或先载入示例看看效果。</p><button type="button" class="primary" id="demo">载入示例</button><small>示例为虚构的演示数据，并非真实成绩。</small></div>';
+    $("demo").onclick=loadDemo;return}
+  var h='<div class="tablewrap"><table><caption>已录入 '+rows.length+' 门课程（点击“编辑”可修改）</caption><thead><tr><th>课程</th><th class="n">学分</th><th class="n">成绩</th><th class="n">绩点</th><th><span class="sr">操作</span></th></tr></thead><tbody>';
+  rows.forEach(function(r){
+    h+='<tr><td>'+esc(r.name)+'</td><td class="n">'+r.credits+'</td><td class="n">'+esc(r.value)+'</td><td class="n">'+f2(pt(r))+'</td><td class="act"><button type="button" class="link" data-e="'+r.id+'" aria-label="编辑 '+esc(r.name)+'">编辑</button><button type="button" class="link danger" data-d="'+r.id+'" aria-label="删除 '+esc(r.name)+'">删除</button></td></tr>'});
+  h+='</tbody></table></div><div class="tools"><button type="button" class="link danger" id="clear">清空全部</button></div>';
+  a.innerHTML=h;
+  a.onclick=function(e){
+    var b=e.target.closest("button");if(!b)return;
+    if(b.dataset.d){rows=rows.filter(function(r){return r.id!=b.dataset.d});if(editId==b.dataset.d)resetForm();save();render()}
+    else if(b.dataset.e){startEdit(Number(b.dataset.e))}
+    else if(b.id==="clear"){if(confirm("确定清空所有课程？")){rows=[];resetForm();save();render()}}}}
+
+function renderChart(){
+  var el=$("chart");
+  if(!rows.length){el.innerHTML='<p class="label">添加课程后显示柱状图。</p>';return}
+  var max=rule==="seg"?4:5,W=640,pad=28,bh=26,gap=12,left=140,H=pad+rows.length*(bh+gap),i;
+  var s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-labelledby="ct"><title id="ct">各科绩点柱状图，满分 '+max+'</title>';
+  for(i=0;i<=max;i++){var x=left+(W-left-50)*i/max;s+='<line class="grid" x1="'+x+'" x2="'+x+'" y1="'+(pad-8)+'" y2="'+H+'"/><text x="'+x+'" y="12" text-anchor="middle">'+i+'</text>'}
+  rows.forEach(function(r,k){
+    var y=pad+k*(bh+gap),p=pt(r),w=(W-left-50)*p/max,nm=r.name.length>8?r.name.slice(0,8)+"…":r.name;
+    s+='<text x="'+(left-10)+'" y="'+(y+bh/2+4)+'" text-anchor="end">'+esc(nm)+'</text><rect class="bar" x="'+left+'" y="'+y+'" width="'+Math.max(w,2)+'" height="'+bh+'" rx="3"/><text class="val" x="'+(left+Math.max(w,2)+8)+'" y="'+(y+bh/2+4)+'">'+f2(p)+'</text>'});
+  s+='</svg><details><summary>查看图表数据表</summary><div class="tablewrap"><table><caption>各科绩点数据</caption><thead><tr><th>课程</th><th class="n">学分</th><th class="n">绩点</th></tr></thead><tbody>';
+  rows.forEach(function(r){s+='<tr><td>'+esc(r.name)+'</td><td class="n">'+r.credits+'</td><td class="n">'+f2(pt(r))+'</td></tr>'});
+  s+='</tbody></table></div></details>';
+  var open=el.querySelector("details")&&el.querySelector("details").open;
+  el.innerHTML=s;if(open)el.querySelector("details").open=true}
+
+function renderTarget(){
+  var tg=parseFloat($("tg").value),rc=parseFloat($("rc").value),n=$("need"),t=totals(),max=rule==="seg"?4:5;
+  if(!(tg>=0)||!(rc>0)){n.innerHTML="填写目标与剩余学分，这里会显示剩余课程需要达到的平均绩点。";return}
+  var need=(tg*(t.c+rc)-t.w)/rc,msg;
+  if(need<=0)msg="目标已确保达成：即使剩余课程全部为 0，总绩点也不低于 "+tg+"。";
+  else if(need>max)msg="按当前规则，剩余课程满分也只能到 "+max+"，目标 "+tg+" 无法达成。";
+  else msg="已修 "+(Math.round(t.c*100)/100)+" 学分，加上剩余 "+rc+" 学分后总绩点要达到 "+tg+"。";
+  n.innerHTML='剩余课程需平均绩点<strong class="num">'+(need<=0?"0.00":f2(need))+'</strong>'+msg+(need>0&&need<=max&&rule==="lin"?" 约合平均 "+f2(need*10+50)+" 分。":"")}
+
+function exportText(){
+  var t=totals(),L=["绩点计算结果（"+(rule==="seg"?"常见 4.0 分段法":"百分制 10-5 法")+"）","规则因学校而异，请以本校为准。",""];
+  rows.forEach(function(r){L.push(r.name+"｜"+r.credits+" 学分｜"+r.value+"｜绩点 "+f2(pt(r)))});
+  L.push("","总学分："+(Math.round(t.c*100)/100),"加权平均绩点："+(t.gpa===null?"—":f2(t.gpa)));
+  return L.join("\n")}
+
+function loadDemo(){
+  rows=[{id:uid++,name:"示例：高等数学",credits:5,type:"score",value:"92"},
+        {id:uid++,name:"示例：大学英语",credits:3,type:"grade",value:"良好"},
+        {id:uid++,name:"示例：程序设计基础",credits:4,type:"score",value:"78"}];
+  save();render()}
+
+function syncType(){
+  var g=$("type").value==="grade";
+  $("val").hidden=g;$("gsel").hidden=!g;
+  $("valLabel").setAttribute("for",g?"gsel":"val");
+  $("valLabel").textContent=g?"等级":"分数（0–100）"}
+function resetForm(){editId=null;$("form").reset();syncType();$("submit").textContent="添加课程";$("err").textContent=""}
+function startEdit(id){
+  var r=rows.filter(function(x){return x.id===id})[0];if(!r)return;
+  editId=id;$("name").value=r.name;$("cr").value=r.credits;$("type").value=r.type;syncType();
+  if(r.type==="grade")$("gsel").value=r.value;else $("val").value=r.value;
+  $("submit").textContent="保存修改";$("name").focus();$("form").scrollIntoView({block:"center"})}
+
+$("type").onchange=syncType;
+$("form").onsubmit=function(e){
+  e.preventDefault();
+  var name=$("name").value.trim(),cr=parseFloat($("cr").value),g=$("type").value==="grade",v=g?$("gsel").value:parseFloat($("val").value),m="";
+  if(!name)m="请填写课程名称。";
+  else if(!(cr>0&&cr<=30))m="学分需为大于 0 的数字。";
+  else if(!g&&!(v>=0&&v<=100))m="百分制分数需在 0 到 100 之间。";
+  $("err").textContent=m;if(m)return;
+  var o={name:name,credits:cr,type:g?"grade":"score",value:String(v)};
+  if(editId!==null){rows.forEach(function(r){if(r.id===editId){r.name=o.name;r.credits=o.credits;r.type=o.type;r.value=o.value}})}
+  else{o.id=uid++;rows.push(o)}
+  resetForm();save();render();$("name").focus()};
+$("rule").onchange=function(){rule=$("rule").value;save();render()};
+$("tg").oninput=$("rc").oninput=renderTarget;
+
+$("copy").onclick=function(){
+  var t=exportText();
+  function ok(){$("toast").textContent="已复制到剪贴板。"}
+  function fb(){var o=$("out");o.value=t;$("out").closest("details").open=true;o.select();try{document.execCommand("copy");ok()}catch(e){$("toast").textContent="请手动复制预览中的文本。"}}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,fb);else fb()};
+$("dl").onclick=function(){
+  var b=new Blob([exportText()],{type:"text/plain;charset=utf-8"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download="绩点.txt";document.body.appendChild(a);a.click();a.remove();$("toast").textContent="已生成下载。"};
+
+/* theme */
+var root=document.documentElement,TL={light:"主题：浅色",dark:"主题：深色",auto:"主题：跟随系统"};
+function applyTheme(t){if(t==="light"||t==="dark")root.setAttribute("data-theme",t);else root.removeAttribute("data-theme");$("theme").textContent=TL[t==="light"||t==="dark"?t:"auto"]}
+var th=store.get("gpa.theme")||"auto";applyTheme(th);
+$("theme").onclick=function(){th=th==="auto"?"light":th==="light"?"dark":"auto";store.set("gpa.theme",th);applyTheme(th)};
+
+load();syncType();render();
+})();
+</script>
+</body>
+</html>

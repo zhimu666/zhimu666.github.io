@@ -7,9 +7,9 @@
 <title>王忠毅 · 个人作品集</title>
 <meta name="description" content="王忠毅，南京财经大学计算机与人工智能方向在读。用原生 HTML/CSS/JS 把想法做成能用的作品。">
 <!-- 图标直接内联，不额外发请求。整站零外部依赖，这一条也不例外。 -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%232340E8'/%3E%3Ctext%20x='16'%20y='24'%20font-family='sans-serif'%20font-size='21'%20font-weight='700'%20text-anchor='middle'%20fill='%23FFFFFF'%3E%E7%8E%8B%3C/text%3E%3C/svg%3E">
-<meta name="theme-color" content="#EEF1F5" media="(prefers-color-scheme:light)">
-<meta name="theme-color" content="#0D1218" media="(prefers-color-scheme:dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='7'%20fill='%23D9421F'/%3E%3Ctext%20x='16'%20y='24'%20font-family='sans-serif'%20font-size='21'%20font-weight='700'%20text-anchor='middle'%20fill='%23FFFFFF'%3E%E7%8E%8B%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#14120F" media="(prefers-color-scheme:dark)">
 <!-- 分享到微信、QQ 或任意聊天窗口时，抓的是这几行 -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="王忠毅 · 个人作品集">
@@ -23,9 +23,9 @@
    其余部分保持安静，互动集中在“作品”里的试玩区和 Ctrl/⌘+K 命令面板。
    字体只用系统字体，国内网络下不会因外链字体卡住渲染。 */
 :root{
-  --bg:#EEF1F5; --surface:#FFFFFF; --ink:#101823; --muted:#55616F; --line:#D3DAE3;
-  --accent:#2340E8; --accent-ink:#FFFFFF; --mark:#FFE766; --mark-ink:#101823;
-  --ok:#0E7A4B; --ok-bg:#DDF3E8; --soft:#E4E9F0; --scrim:rgba(16,24,35,.45);
+  --bg:#F7F5F0; --surface:#FFFFFF; --ink:#15130F; --muted:#6B665C; --line:#E4DFD3;
+  --accent:#C93A18; --accent-ink:#FFFFFF; --mark:#15130F; --mark-ink:#F7F5F0;
+  --ok:#0E7A4B; --ok-bg:#DDF3E8; --soft:#EFEBE1; --scrim:rgba(21,19,15,.45);
   --sans:"PingFang SC","HarmonyOS Sans SC","Microsoft YaHei UI","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
   --gutter:clamp(16px,4vw,40px);
   --head-h:60px;
@@ -33,15 +33,15 @@
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --bg:#0D1218; --surface:#151C25; --ink:#E9EDF2; --muted:#9AA5B2; --line:#27313D;
-    --accent:#8AA2FF; --accent-ink:#0D1218; --mark:#F0DC5A; --mark-ink:#101823;
-    --ok:#6FD3A1; --ok-bg:#12301F; --soft:#1C2530; --scrim:rgba(0,0,0,.6); color-scheme:dark;
+    --bg:#14120F; --surface:#1D1A16; --ink:#F3EFE6; --muted:#A39D90; --line:#2F2A23;
+    --accent:#FF6A45; --accent-ink:#14120F; --mark:#F3EFE6; --mark-ink:#14120F;
+    --ok:#6FD3A1; --ok-bg:#12301F; --soft:#26221C; --scrim:rgba(0,0,0,.6); color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0D1218; --surface:#151C25; --ink:#E9EDF2; --muted:#9AA5B2; --line:#27313D;
-  --accent:#8AA2FF; --accent-ink:#0D1218; --mark:#F0DC5A; --mark-ink:#101823;
-  --ok:#6FD3A1; --ok-bg:#12301F; --soft:#1C2530; --scrim:rgba(0,0,0,.6); color-scheme:dark;
+  --bg:#14120F; --surface:#1D1A16; --ink:#F3EFE6; --muted:#A39D90; --line:#2F2A23;
+  --accent:#FF6A45; --accent-ink:#14120F; --mark:#F3EFE6; --mark-ink:#14120F;
+  --ok:#6FD3A1; --ok-bg:#12301F; --soft:#26221C; --scrim:rgba(0,0,0,.6); color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--head-h) + 16px)}
@@ -61,7 +61,7 @@ kbd{font:inherit;font-size:.75rem;padding:1px 6px;border:1px solid var(--line);b
 .progress{position:fixed;left:0;top:0;width:100%;height:3px;z-index:50;background:var(--accent);transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
 
 /* 顶栏 */
-.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--head-h);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;height:var(--head-h);background:var(--bg);border-bottom:1px solid var(--line)}
 .head .wrap{height:100%;display:flex;align-items:center;gap:12px;justify-content:space-between}
 .brand{font-weight:800;text-decoration:none;letter-spacing:.02em;white-space:nowrap}
 .nav{display:flex;gap:4px;min-width:0}
@@ -107,7 +107,7 @@ kbd{font:inherit;font-size:.75rem;padding:1px 6px;border:1px solid var(--line);b
 .weight{background:var(--mark);color:var(--mark-ink);border-radius:18px;padding:clamp(20px,3vw,28px)}
 .weight h2{font-size:1rem;font-weight:700}
 .weight dl{display:grid;gap:2px;margin-top:10px}
-.weight dl div{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-block:9px;border-top:1px solid rgba(16,24,35,.22)}
+.weight dl div{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding-block:9px;border-top:1px solid color-mix(in srgb,var(--mark-ink) 28%,transparent)}
 .weight dt{font-size:.9375rem}
 .weight dd{font-size:1.85rem;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
 .weight dd small{font-size:.9rem;font-weight:600;margin-left:4px;letter-spacing:0}
@@ -169,9 +169,9 @@ kbd{font:inherit;font-size:.75rem;padding:1px 6px;border:1px solid var(--line);b
 /* 版本演化：模拟 SIGNAL 自己的界面，在两种主题下保持自成一体 */
 .evo{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(20px,3vw,36px);align-items:start;margin-top:16px}
 @media (max-width:900px){.evo{grid-template-columns:minmax(0,1fr)}}
-.mock{--m-bg:#F4F6FF;--m-surface:#FFFFFF;--m-ink:#1A2038;--m-mute:#5A6285;--m-line:#E1E5F2;--m-acc:#5B5BF0;
+.mock{--m-bg:#F7F5F0;--m-surface:#FFFFFF;--m-ink:#15130F;--m-mute:#6B665C;--m-line:#E4DFD3;--m-acc:#C93A18;
   background:var(--m-bg);color:var(--m-ink);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:12.5px;line-height:1.45}
-.mock.dark{--m-bg:#0F1220;--m-surface:#181C30;--m-ink:#E8EBFA;--m-mute:#9AA2C8;--m-line:#2A3050;--m-acc:#8F8FFF}
+.mock.dark{--m-bg:#14120F;--m-surface:#1D1A16;--m-ink:#F3EFE6;--m-mute:#A39D90;--m-line:#2F2A23;--m-acc:#FF6A45}
 .mk-bar{display:flex;align-items:center;gap:.8em;padding:.8em 1.1em;background:var(--m-surface);border-bottom:1px solid var(--m-line);font-weight:800;letter-spacing:.06em}
 .mk-bar i{width:.8em;height:.8em;border-radius:50%;background:var(--m-acc);flex:none}
 .mk-nav{display:flex;gap:.8em;color:var(--m-mute);font-weight:500;letter-spacing:0;margin-left:.45em;min-width:0;overflow:hidden}
@@ -192,7 +192,7 @@ kbd{font:inherit;font-size:.75rem;padding:1px 6px;border:1px solid var(--line);b
 .mk-cards li{padding:.8em;border:1px solid var(--m-line);border-radius:10px;background:var(--m-surface);display:grid;gap:.3em;align-content:start;min-width:0}
 .mk-cards li small{color:var(--m-mute);font-size:.88em}
 .mk-cards li b{font-size:1em;line-height:1.4}
-.mk-cards li.lead{grid-column:1/-1;background:linear-gradient(160deg,#4F6BFF,#7A5CF0);border:0;color:#FFFFFF}
+.mk-cards li.lead{grid-column:1/-1;background:#15130F;border:0;color:#FFFFFF}
 .mk-cards li.lead small{color:rgba(255,255,255,.85)}
 .mk-cards li.lead b{font-size:1.2em}
 .mk-cards details{margin-top:.35em;color:#FFFFFF}
@@ -246,6 +246,13 @@ body.zooming{overflow:hidden}
 .coming b{display:block;color:var(--ink)}
 .next{margin-top:18px;font-size:.9375rem;color:var(--muted);max-width:42em}
 
+/* 小工具 */
+.tool-list{display:grid;border-top:1px solid var(--line)}
+.tool{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 32px;align-items:center;padding:24px 0;border-bottom:1px solid var(--line)}
+.tool h3{font-size:1.375rem;font-weight:800;letter-spacing:-.01em}
+.tool p{margin-top:6px;max-width:38em;color:var(--muted)}
+.tool .tool-note{font-size:.875rem}
+@media (max-width:640px){.tool{grid-template-columns:minmax(0,1fr)}.tool .btn{justify-self:start}}
 /* GitHub */
 .repos{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 .repo{display:grid;gap:6px;align-content:start;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;transition:border-color .2s,transform .2s}
@@ -353,6 +360,7 @@ body.zooming{overflow:hidden}
     <nav class="nav" aria-label="页面导航">
       <a href="#about">介绍</a>
       <a href="#works">作品</a>
+      <a href="#tools">小工具</a>
       <a href="#code" id="navCode" hidden>代码</a>
       <a href="#adv">优势</a>
       <a href="#hci">设计依据</a>
@@ -518,11 +526,7 @@ body.zooming{overflow:hidden}
             </ul>
           </div>
           <div>
-            <h3 class="sub-title">整理中</h3>
-            <ul class="coming">
-              <li><b>AI 日报综合站</b>正在整理归档。</li>
-              <li><b>AI 行业日报看板</b>正在整理归档。</li>
-            </ul>
+            <h3 class="sub-title">接下来</h3>
             <p class="next">SIGNAL 接下来想做的：接入有明确来源、发布时间和链接的真实新闻；按日期归档与收藏；按日报日期隔离阅读状态；导出适合分享的封面。</p>
           </div>
         </div>
@@ -530,6 +534,28 @@ body.zooming{overflow:hidden}
     </div>
   </section>
 
+  <section class="sec" id="tools" aria-labelledby="tools-t">
+    <div class="wrap sec-grid">
+      <div class="sec-title"><h2 id="tools-t">小工具</h2><p>三个都是为大学生活做的单文件小应用，数据只存在你自己的浏览器里。</p></div>
+      <div>
+        <ul class="tool-list">
+          <li class="tool">
+            <div><h3>绩点计算器</h3><p>录入课程、学分和成绩，实时算出加权绩点；告诉它目标绩点，反推剩余课程需要考到多少。支持百分制与五级制、两种常见折算规则，附柱状图和数据表。</p><p class="tool-note">折算规则各校不同，页面里写明了要以本校为准。</p></div>
+            <a class="btn" href="works/gpa/" target="_blank" rel="noopener">打开</a>
+          </li>
+          <li class="tool">
+            <div><h3>专注台</h3><p>任务清单加番茄钟。倒计时按结束时刻计算，切到别的标签页也不会走慢；记录每个任务完成的番茄数，近 7 天的专注时长来自真实使用记录，没用过就是空的。</p><p class="tool-note">快捷键：空格开始或暂停，N 新建任务。</p></div>
+            <a class="btn" href="works/focus/" target="_blank" rel="noopener">打开</a>
+          </li>
+          <li class="tool">
+            <div><h3>课表</h3><p>周一到周日 × 12 节的课表，设好开学日期就知道现在是第几周、下一节课在哪。录入时检查时间冲突，支持单双周，窄屏自动变成今日课程列表，可导出导入和打印。</p><p class="tool-note">示例课程都带「示例」标记，默认是空表。</p></div>
+            <a class="btn" href="works/timetable/" target="_blank" rel="noopener">打开</a>
+          </li>
+        </ul>
+        <p class="hint" style="margin-top:16px">三个小应用都是我提需求、AI 辅助写代码，再自己检查和测试的结果。</p>
+      </div>
+    </div>
+  </section>
   <!-- GitHub 动态：在下方脚本顶部把 GITHUB_USER 改成真实用户名后才会显示；留空则整块隐藏 -->
   <section class="sec" id="code" aria-labelledby="code-t" hidden>
     <div class="wrap sec-grid">
@@ -602,11 +628,11 @@ body.zooming{overflow:hidden}
         <div class="r-row"><h3>教育背景</h3><ul><li><b>南京财经大学</b><br>计算机与人工智能<br><span class="when">2024 年入学至今</span></li></ul></div>
         <div class="r-row"><h3>专业技能</h3>
           <ul class="skill" aria-label="技能列表">
-            <li>HTML / CSS / JavaScript（原生，零外部依赖）</li><li>响应式布局</li><li>无障碍交互</li><li>交互设计</li><li>AI 辅助开发（Vibe Coding）</li>
+            <li>HTML / CSS / JavaScript（原生，零外部依赖）</li><li>响应式布局</li><li>无障碍交互</li><li>交互设计</li><li>AI 辅助开发（Vibe Coding）</li><li>localStorage 本地存储</li><li>内联 SVG 图表</li>
           </ul>
         </div>
         <div class="r-row"><h3>实践与项目</h3>
-          <ul><li><b>SIGNAL · AI 行业日报</b><br>人机交互课程作品，独立完成设计与开发。<a href="#works">看作品详情</a></li></ul>
+          <ul><li><b>SIGNAL · AI 行业日报</b><br>人机交互课程作品，独立完成设计与开发。<a href="#works">看作品详情</a></li><li><b>绩点计算器 / 专注台 / 课表</b><br>三个面向大学生活的单文件小应用，个人提需求与测试，AI 辅助开发。<a href="#tools">看详情</a></li><li><b>个人作品集网站</b><br>本站，已部署在 GitHub Pages。</li></ul>
         </div>
         <div>
           <a class="btn pri" href="https://zhimu666.github.io/%E7%8E%8B%E5%BF%A0%E6%AF%85_%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86.docx" target="_blank" rel="noopener">下载完整简历（.docx）</a>
@@ -936,6 +962,10 @@ body.zooming{overflow:hidden}
     {t:'跳转：联系我',h:'章节',k:'contact 联系 lianxi',run:function(){go('contact');}},
     {t:'试玩：SIGNAL 版本演化',h:'作品',k:'版本 演化 迭代 evolution',run:function(){selectTab('evo'); $('play').scrollIntoView({block:'start'});}},
     {t:'试玩：筛选与已读',h:'作品',k:'筛选 已读 demo',run:function(){selectTab('demo'); $('play').scrollIntoView({block:'start'});}},
+    {t:'跳转：小工具',h:'章节',k:'tools 小工具 xiaogongju',run:function(){go('tools');}},
+    {t:'打开 绩点计算器',h:'新标签页',k:'绩点 gpa 计算器',run:function(){openLink(SITE+'works/gpa/');}},
+    {t:'打开 专注台',h:'新标签页',k:'专注 番茄钟 focus pomodoro',run:function(){openLink(SITE+'works/focus/');}},
+    {t:'打开 课表',h:'新标签页',k:'课表 timetable 课程',run:function(){openLink(SITE+'works/timetable/');}},
     {t:'打开 SIGNAL · AI 行业日报',h:'新标签页',k:'signal 日报 ai daily',run:function(){openLink(SITE+'works/ai-daily/index.html');}},
     {t:'下载简历（.docx）',h:'新标签页',k:'简历 下载 resume cv',run:function(){openLink(SITE+'%E7%8E%8B%E5%BF%A0%E6%AF%85_%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86.docx');}},
     {t:'复制本页链接',h:'复制',k:'链接 分享 link share url',run:function(){copyText(location.href,'已复制本页链接');}},
