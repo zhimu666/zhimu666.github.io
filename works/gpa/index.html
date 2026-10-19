@@ -98,7 +98,7 @@ footer{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--muted);f
 <section aria-labelledby="h-res">
   <h2 id="h-res">当前绩点</h2>
   <div class="result" aria-live="polite" aria-atomic="true">
-    <div><span class="label">加权平均绩点</span><p class="big num" id="gpa">—</p></div>
+    <div><span class="label">加权平均绩点</span><p class="big num" id="gpa">0.00</p></div>
     <div><span class="label">总学分</span><p class="mid num" id="credits">0</p></div>
     <div><span class="label">平均成绩（百分制折算）</span><p class="mid num" id="avg">—</p></div>
   </div>
@@ -189,7 +189,7 @@ function load(){
 
 function render(){
   var t=totals();
-  $("gpa").textContent=t.gpa===null?"—":f2(t.gpa);
+  $("gpa").textContent=t.gpa===null?"0.00":f2(t.gpa);
   $("credits").textContent=t.c?String(Math.round(t.c*100)/100):"0";
   $("avg").textContent=t.avg===null?"—":f2(t.avg);
   $("rule").value=rule;
