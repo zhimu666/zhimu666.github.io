@@ -361,7 +361,7 @@ body.zooming{overflow:hidden}
       <a href="#about">介绍</a>
       <a href="#works">作品</a>
       <a href="#tools">小工具</a>
-      <a href="#code" id="navCode" hidden>代码</a>
+      <a href="#code" id="navCode">代码</a>
       <a href="#adv">优势</a>
       <a href="#hci">设计依据</a>
       <a href="#resume">简历</a>
@@ -557,12 +557,18 @@ body.zooming{overflow:hidden}
     </div>
   </section>
   <!-- GitHub 动态：在下方脚本顶部把 GITHUB_USER 改成真实用户名后才会显示；留空则整块隐藏 -->
-  <section class="sec" id="code" aria-labelledby="code-t" hidden>
+  <section class="sec" id="code" aria-labelledby="code-t">
     <div class="wrap sec-grid">
-      <div class="sec-title"><h2 id="code-t">代码</h2><p>来自 GitHub 的公开仓库，打开页面时自动读取。</p></div>
+      <div class="sec-title"><h2 id="code-t">代码</h2><p>代码托管在 GitHub，网站本身就是从这个仓库直接发布的。</p></div>
       <div>
-        <p class="gh-sum" id="ghSum"></p>
-        <div class="repos" id="repos"></div>
+        <p class="gh-sum" id="ghSum">本站所有页面都是原生 HTML、CSS、JavaScript 单文件，没有框架也没有构建步骤，源码公开可查。仓库列表在打开页面时从 GitHub 自动读取。</p>
+        <div class="repos" id="repos">
+          <a class="repo" href="https://github.com/zhimu666/zhimu666.github.io" target="_blank" rel="noopener">
+            <b>zhimu666.github.io</b>
+            <p>本站全部源码：个人作品集首页、SIGNAL · AI 行业日报，以及绩点计算器、专注台、课表三个小工具。每个页面是一个独立的 HTML 文件，通过 GitHub Pages 发布。</p>
+            <small>HTML · CSS · JavaScript · GitHub Pages</small>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -644,10 +650,11 @@ body.zooming{overflow:hidden}
 
   <section class="sec" id="contact" aria-labelledby="contact-t">
     <div class="wrap sec-grid">
-      <div class="sec-title"><h2 id="contact-t">联系我</h2><p>如果你对我的作品感兴趣，欢迎随时联系。</p></div>
+      <div class="sec-title"><h2 id="contact-t">联系我</h2><p>如果你对我的作品感兴趣，欢迎随时联系。电话和邮箱目前为示例信息。</p></div>
       <div class="contact">
         <div class="c-row"><div><small>GitHub</small><a class="val" id="cGh" href="https://github.com/zhimu666" target="_blank" rel="noopener">github.com/zhimu666</a></div><button class="copy" type="button" data-target="cGh" aria-label="复制 GitHub 地址">复制</button></div>
-        <div class="c-row"><div><small>电话 / 邮箱</small><span class="val" id="cMail">待补充</span></div></div>
+        <div class="c-row"><div><small>电话（示例）</small><span class="val" id="cPhone">138-0000-0000</span></div><button class="copy" type="button" data-target="cPhone" aria-label="复制电话号码">复制</button></div>
+        <div class="c-row"><div><small>邮箱（示例）</small><span class="val" id="cMail">wangzy@example.com</span></div><button class="copy" type="button" data-target="cMail" aria-label="复制邮箱地址">复制</button></div>
       </div>
     </div>
   </section>
@@ -970,6 +977,8 @@ body.zooming{overflow:hidden}
     {t:'下载简历（.docx）',h:'新标签页',k:'简历 下载 resume cv',run:function(){openLink(SITE+'%E7%8E%8B%E5%BF%A0%E6%AF%85_%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86.docx');}},
     {t:'复制本页链接',h:'复制',k:'链接 分享 link share url',run:function(){copyText(location.href,'已复制本页链接');}},
     {t:'打印 / 另存为 PDF',h:'导出',k:'打印 pdf 导出 print',run:function(){window.print();}},
+    {t:'复制邮箱',h:'复制',k:'邮箱 email mail',run:function(){copyEl('cMail','已复制邮箱');}},
+    {t:'复制电话',h:'复制',k:'电话 phone tel',run:function(){copyEl('cPhone','已复制电话');}},
     {t:'复制 GitHub 地址',h:'复制',k:'github 代码 仓库',run:function(){copyEl('cGh','已复制 GitHub 地址');}},
     {t:'切换深色 / 浅色主题',h:'设置',k:'主题 深色 浅色 theme dark light',run:toggleTheme},
     {t:'回到顶部',h:'章节',k:'top 顶部',run:function(){window.scrollTo({top:0});}}
@@ -1021,7 +1030,7 @@ body.zooming{overflow:hidden}
     fetch('https://api.github.com/users/'+encodeURIComponent(GITHUB_USER)+'/repos?per_page=100&sort=pushed')
       .then(function(r){ if(!r.ok) throw new Error('http'); return r.json(); })
       .then(function(rs){
-        rs=rs.filter(function(r){ return !r.fork; }).slice(0,6);
+        rs=rs.filter(function(r){ return !r.fork && r.name!==GITHUB_USER+".github.io"; }).slice(0,6);
         if(!rs.length) return;
         var wrap=$('repos');
         rs.forEach(function(r){
@@ -1032,9 +1041,7 @@ body.zooming{overflow:hidden}
           s.textContent=[r.language||'', r.stargazers_count?('★ '+r.stargazers_count):'', '更新于 '+String(r.pushed_at||'').slice(0,10)].filter(Boolean).join(' · ');
           a.appendChild(b); a.appendChild(p); a.appendChild(s); wrap.appendChild(a);
         });
-        $('ghSum').textContent='GitHub @'+GITHUB_USER+' 最近更新的 '+rs.length+' 个原创仓库。';
-        $('code').hidden=false; $('navCode').hidden=false;
-        if(io){ io.observe($('code')); }
+        $('ghSum').textContent='本站源码如下；另有 '+rs.length+' 个 GitHub 公开仓库（@'+GITHUB_USER+'）。';
       }).catch(function(){});
   }
 })();
